@@ -1,4 +1,14 @@
+//! Command line parser.
+//!
+//! ### Usage
+//!
+//! ```rust
+//! let parse = Parse::default();
+//! parse.call()
+//! ```
+
 use crate::cli::{Cli, Sub};
+use crate::core::nyancat;
 use structopt::StructOpt;
 
 pub struct Parse {
@@ -14,11 +24,10 @@ impl Default for Parse {
 }
 
 impl Parse {
+    /// Call functions.
     pub fn call(&self) {
         match self.cli.sub {
-            Sub::NyanCat => {
-                println!("TODO: nyan cat.")
-            }
+            Sub::NyanCat => nyancat::nyancat(),
         }
     }
 }

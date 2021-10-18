@@ -1,7 +1,8 @@
 mod cli;
+mod core;
 mod parse;
 
-use crate::parse::Parse;
+use parse::Parse;
 
 fn main() {
     let parse = Parse::default();
