@@ -1,3 +1,10 @@
+mod cli;
+mod parse;
+
+use crate::parse::Parse;
+
 fn main() {
-    println!("Hello, world!");
+    let parse = Parse::default();
+
+    parse.call();
 }
