@@ -28,24 +28,46 @@ impl<'a> Language<'a> {
     }
 
     pub fn run(&self) -> Option<Output> {
-        let version_option = match self.version_command_type {
-            VersionType::OneHyphen => "-version",
-            VersionType::TwoHyphen => "--version",
-            VersionType::NoHyphen => "version",
+        if self.exist_command() {
+            let version_option = match self.version_command_type {
+                VersionType::OneHyphen => "-version",
+                VersionType::TwoHyphen => "--version",
+                VersionType::NoHyphen => "version",
+            };
+
+            let result = match cfg!(target_os = "windows") {
+                true => Command::new("cmd")
+                    .args(["/C", self.command, version_option])
+                    .output(),
+                false => Command::new("sh")
+                    .arg("-c")
+                    .arg(format!("{} {}", self.command, version_option))
+                    .output(),
+            };
+
+            match result {
+                Ok(result) => Some(result),
+                Err(_) => None,
+            }
+        } else {
+            None
+        }
+    }
+
+    fn exist_command(&self) -> bool {
+        let result = match cfg!(target_os = "windows") {
+            true => Command::new("cmd")
+                .args(["/C", "where.exe", self.command])
+                .output(),
+            false => Command::new("sh")
+                .arg("-c")
+                .arg(format!("{} {}", "which", self.command))
+                .output(),
         };
 
-        let command = format!("{} {}", self.command, version_option);
-
-        if cfg!(target_os = "windows") {
-            None
-        } else {
-            Some(
-                Command::new("sh")
-                    .arg("-c")
-                    .arg(command)
-                    .output()
-                    .expect("failed to execute process"),
-            )
+        match result {
+            Ok(result) => result.stderr.len() == 0 && result.stdout.len() != 0,
+            Err(_) => false,
         }
     }
 }
@@ -53,7 +75,7 @@ impl<'a> Language<'a> {
 #[cfg(test)]
 mod languages_tests {
     use crate::core::languages::{Language, VersionType};
-    use std::{process::exit, str::from_utf8};
+    use std::str::from_utf8;
 
     #[test]
     fn language_trait() {
@@ -77,7 +99,26 @@ mod languages_tests {
 
             assert_eq!(from_utf8(&result.stderr), Ok(""));
         } else {
-            exit(1)
+            assert_eq!(false, true);
         }
+    }
+
+    #[test]
+    fn not_exist_lang() {
+        let command = "hoge";
+        let keywords = vec!["hogehoge"];
+        let version_command_type = VersionType::NoHyphen;
+
+        let lang_unknown = Language {
+            command,
+            keywords,
+            version_command_type,
+        };
+
+        let result = lang_unknown.run();
+
+        println!("{:?}", result);
+
+        assert_eq!(result.is_none(), true);
     }
 }
