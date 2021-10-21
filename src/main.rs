@@ -1,6 +1,7 @@
 mod cli;
 mod core;
 mod parse;
+mod utils;
 
 use parse::Parse;
 
