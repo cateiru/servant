@@ -13,4 +13,8 @@ pub enum Sub {
     #[structopt(name = "nyancat", about = "nyanyanyanyanya")]
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
     NyanCat,
+
+    #[structopt(name = "lang", about = "check installed programming languages")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    Lang,
 }

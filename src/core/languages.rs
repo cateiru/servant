@@ -72,6 +72,8 @@ impl<'a> Language<'a> {
     }
 }
 
+pub fn languages() {}
+
 #[cfg(test)]
 mod languages_tests {
     use crate::core::languages::{Language, VersionType};

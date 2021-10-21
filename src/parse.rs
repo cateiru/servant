@@ -8,7 +8,7 @@
 //! ```
 
 use crate::cli::{Cli, Sub};
-use crate::core::nyancat;
+use crate::core::{languages, nyancat};
 use structopt::StructOpt;
 
 pub struct Parse {
@@ -28,6 +28,8 @@ impl Parse {
     pub fn call(&self) {
         match self.cli.sub {
             Sub::NyanCat => nyancat::nyancat(),
+            Sub::Lang => languages::languages(),
+            _ => println!("Oops!!"),
         }
     }
 }
