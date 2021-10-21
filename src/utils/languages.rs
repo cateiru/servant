@@ -72,8 +72,8 @@ impl<'a> Language<'a> {
     }
 }
 
-pub fn languages<'a>() -> [Language<'a>; 7] {
-    let languages: [Language; 7] = [
+pub fn languages<'a>() -> [Language<'a>; 8] {
+    let languages: [Language; 8] = [
         Language {
             command: "python",
             keywords: vec!["python", "py"],
@@ -107,6 +107,11 @@ pub fn languages<'a>() -> [Language<'a>; 7] {
         Language {
             command: "g++",
             keywords: vec!["gpp", "cpp", "g++", "c++", "cplusplus"],
+            version_command_type: VersionType::TwoHyphen,
+        },
+        Language {
+            command: "ruby",
+            keywords: vec!["ruby", "rb"],
             version_command_type: VersionType::TwoHyphen,
         },
     ];
