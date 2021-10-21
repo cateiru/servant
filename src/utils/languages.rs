@@ -4,6 +4,7 @@ pub enum VersionType {
     OneHyphen,
     TwoHyphen,
     NoHyphen,
+    ShortOneHyphen,
 }
 
 pub struct Language<'a> {
@@ -33,6 +34,7 @@ impl<'a> Language<'a> {
                 VersionType::OneHyphen => "-version",
                 VersionType::TwoHyphen => "--version",
                 VersionType::NoHyphen => "version",
+                VersionType::ShortOneHyphen => "-v",
             };
 
             let result = match cfg!(target_os = "windows") {
@@ -72,8 +74,8 @@ impl<'a> Language<'a> {
     }
 }
 
-pub fn languages<'a>() -> [Language<'a>; 8] {
-    let languages: [Language; 8] = [
+pub fn languages<'a>() -> [Language<'a>; 11] {
+    let languages: [Language; 11] = [
         Language {
             command: "python",
             keywords: vec!["python", "py"],
@@ -91,7 +93,12 @@ pub fn languages<'a>() -> [Language<'a>; 8] {
         },
         Language {
             command: "java",
-            keywords: vec!["java", "javac", "jdk"],
+            keywords: vec!["java"],
+            version_command_type: VersionType::TwoHyphen,
+        },
+        Language {
+            command: "javac",
+            keywords: vec!["javac", "jdk"],
             version_command_type: VersionType::TwoHyphen,
         },
         Language {
@@ -113,6 +120,16 @@ pub fn languages<'a>() -> [Language<'a>; 8] {
             command: "ruby",
             keywords: vec!["ruby", "rb"],
             version_command_type: VersionType::TwoHyphen,
+        },
+        Language {
+            command: "perl",
+            keywords: vec!["perl"],
+            version_command_type: VersionType::TwoHyphen,
+        },
+        Language {
+            command: "lua",
+            keywords: vec!["lua"],
+            version_command_type: VersionType::ShortOneHyphen,
         },
     ];
 
