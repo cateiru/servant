@@ -424,8 +424,6 @@ pub fn nyancat() {
     ];
     let mut flame = 0;
 
-    let a = ["hoge", "Huga"];
-
     loop {
         let text = animation[flame % 12].join("\n");
         print!("\n{}\n", text);
