@@ -11,7 +11,7 @@ pub fn languages() {
             let version = from_utf8(&result.stdout);
             if let Ok(version) = version {
                 println!("🔹 {}", lang.command);
-                println!("\t{}", version);
+                println!("\t{}", version.replace("\n", "\n\t"));
             }
         }
     }
