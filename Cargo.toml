@@ -5,6 +5,7 @@ edition = "2021"
 authors = ["Yuto Watanabe <yuto.w51942@gmail.com>"]
 license = "MIT"
 repository = "https://github.com/yuto51942/servant"
+description = "Utilities cli."
 readme = "README.md"
 exclude = [
     ".github/*",
