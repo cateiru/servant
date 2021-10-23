@@ -29,7 +29,6 @@ impl Parse {
         match self.cli.sub {
             Sub::NyanCat => nyancat::nyancat(),
             Sub::Lang => languages::languages(),
-            _ => println!("Oops!!"),
         }
     }
 }
