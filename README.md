@@ -1,4 +1,4 @@
-![crates.io](https://img.shields.io/crates/v/yuto51942-servant)
+[![crates.io](https://img.shields.io/crates/v/yuto51942-servant)](https://crates.io/crates/yuto51942-servant)
 
 # Servant
 
