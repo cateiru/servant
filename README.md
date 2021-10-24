@@ -23,7 +23,7 @@ sv --help
 ```
 
 ```bash
-servant 0.1.0
+servant 0.1.3
 servant is utils cli.
 
 USAGE:
@@ -37,6 +37,7 @@ SUBCOMMANDS:
     help       Prints this message or the help of the given subcommand(s)
     lang       check installed programming languages
     nyancat    nyanyanyanyanya
+    timer      countdown timer
 ```
 
 ## LICENSE
