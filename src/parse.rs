@@ -26,9 +26,15 @@ impl Default for Parse {
 impl Parse {
     /// Call functions.
     pub fn call(&self) {
-        match self.cli.sub {
+        match &self.cli.sub {
             Sub::NyanCat => nyancat::nyancat(),
-            Sub::Lang => languages::languages(),
+            Sub::Lang { language } => {
+                if let Some(lang) = language {
+                    languages::selected_languages(&lang);
+                } else {
+                    languages::languages()
+                }
+            }
         }
     }
 }

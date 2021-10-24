@@ -16,5 +16,8 @@ pub enum Sub {
 
     #[structopt(name = "lang", about = "check installed programming languages")]
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
-    Lang,
+    Lang {
+        #[structopt(long)]
+        language: Option<String>,
+    },
 }
