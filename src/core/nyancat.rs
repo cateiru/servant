@@ -1,3 +1,6 @@
+use crate::utils::print;
+use std::{error::Error, thread::sleep, time::Duration};
+
 const AA_1: [&str; 32] = [
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ (@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ (@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
@@ -420,7 +423,7 @@ const AA_12: [&str; 32] = [
 
 /// Export nancat!
 /// nyanyanyanyanya...
-pub fn nyancat() {
+pub fn nyancat() -> Result<(), Box<dyn Error>> {
     let animation = [
         AA_1, AA_2, AA_3, AA_4, AA_5, AA_6, AA_7, AA_8, AA_9, AA_10, AA_11, AA_12,
     ];
@@ -428,10 +431,11 @@ pub fn nyancat() {
 
     loop {
         let text = animation[flame % 12].join("\n");
-        print!("\n{}\n", text);
+
+        print::print_line(&text)?;
 
         print!("{esc}c", esc = 27 as char);
-        std::thread::sleep(std::time::Duration::from_millis(100));
+        sleep(Duration::from_millis(100));
 
         flame += 1;
     }

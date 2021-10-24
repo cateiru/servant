@@ -20,4 +20,11 @@ pub enum Sub {
         #[structopt(long)]
         language: Option<String>,
     },
+
+    #[structopt(name = "timer", about = "countdown timer")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    Timer {
+        #[structopt(long)]
+        time: usize,
+    },
 }

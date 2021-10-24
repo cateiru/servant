@@ -8,7 +8,7 @@
 //! ```
 
 use crate::cli::{Cli, Sub};
-use crate::core::{languages, nyancat};
+use crate::core::{languages, nyancat, timer};
 use structopt::StructOpt;
 
 pub struct Parse {
@@ -28,7 +28,7 @@ impl Parse {
     /// Call functions.
     pub fn call(&self) {
         match &self.cli.sub {
-            Sub::NyanCat => nyancat::nyancat(),
+            Sub::NyanCat => nyancat::nyancat().unwrap(),
             Sub::Lang { language } => {
                 if let Some(lang) = language {
                     languages::selected_languages(&lang);
@@ -36,6 +36,7 @@ impl Parse {
                     languages::languages()
                 }
             }
+            Sub::Timer { time } => timer::timer(&time).unwrap(),
         }
     }
 }
