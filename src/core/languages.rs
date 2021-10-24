@@ -1,6 +1,7 @@
 use crate::utils::languages::{languages as lang_list, Language};
 use std::str::from_utf8;
 
+/// export versions in all installed languages.
 pub fn languages() {
     let languages = lang_list();
 
@@ -9,6 +10,7 @@ pub fn languages() {
     }
 }
 
+/// export target language version.
 pub fn selected_languages(target: &str) {
     let languages = lang_list();
 
@@ -19,6 +21,7 @@ pub fn selected_languages(target: &str) {
     }
 }
 
+/// export version.
 fn export_version(lang: &Language) {
     let result = lang.run();
 

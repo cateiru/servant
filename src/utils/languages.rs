@@ -14,6 +14,8 @@ pub struct Language<'a> {
 }
 
 impl<'a> Language<'a> {
+    /// Compares if it is the same as the language of the argument.
+    /// Returns `true` if they are the same.
     pub fn search(&self, lang: &str) -> bool {
         let mut flag = false;
         let target = lang.to_lowercase();
@@ -28,6 +30,8 @@ impl<'a> Language<'a> {
         flag
     }
 
+    /// Get version info through a subprocess.
+    /// Returns `None` if the command does not exist.
     pub fn run(&self) -> Option<Output> {
         if self.exist_command() {
             let version_option = match self.version_command_type {
@@ -56,6 +60,8 @@ impl<'a> Language<'a> {
         }
     }
 
+    /// Check if exist target command.
+    /// Returns `true` if exist.
     fn exist_command(&self) -> bool {
         let result = match cfg!(target_os = "windows") {
             true => Command::new("cmd")
@@ -74,6 +80,7 @@ impl<'a> Language<'a> {
     }
 }
 
+/// Returns an array of Language structures for each language.
 pub fn languages<'a>() -> [Language<'a>; 11] {
     let languages: [Language; 11] = [
         Language {

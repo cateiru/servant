@@ -16,6 +16,7 @@ pub struct Parse {
 }
 
 impl Default for Parse {
+    /// Create a default struct.
     fn default() -> Self {
         let cli = Cli::from_args();
 

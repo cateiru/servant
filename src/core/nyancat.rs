@@ -418,6 +418,8 @@ const AA_12: [&str; 32] = [
     "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%@@@@@@@@@@@@@@@@@@@@@@@@@@@@",
 ];
 
+/// Export nancat!
+/// nyanyanyanyanya...
 pub fn nyancat() {
     let animation = [
         AA_1, AA_2, AA_3, AA_4, AA_5, AA_6, AA_7, AA_8, AA_9, AA_10, AA_11, AA_12,
