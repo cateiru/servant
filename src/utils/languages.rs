@@ -81,8 +81,8 @@ impl<'a> Language<'a> {
 }
 
 /// Returns an array of Language structures for each language.
-pub fn languages<'a>() -> [Language<'a>; 11] {
-    let languages: [Language; 11] = [
+pub fn languages<'a>() -> [Language<'a>; 12] {
+    let languages: [Language; 12] = [
         Language {
             command: "python",
             keywords: vec!["python", "py"],
@@ -100,12 +100,12 @@ pub fn languages<'a>() -> [Language<'a>; 11] {
         },
         Language {
             command: "java",
-            keywords: vec!["java"],
+            keywords: vec!["java", "jdk"],
             version_command_type: VersionType::TwoHyphen,
         },
         Language {
             command: "javac",
-            keywords: vec!["javac", "jdk"],
+            keywords: vec!["javac"],
             version_command_type: VersionType::TwoHyphen,
         },
         Language {
@@ -137,6 +137,11 @@ pub fn languages<'a>() -> [Language<'a>; 11] {
             command: "lua",
             keywords: vec!["lua"],
             version_command_type: VersionType::ShortOneHyphen,
+        },
+        Language {
+            command: "nim",
+            keywords: vec!["nim"],
+            version_command_type: VersionType::TwoHyphen,
         },
     ];
 

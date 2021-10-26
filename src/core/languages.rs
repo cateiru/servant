@@ -13,11 +13,17 @@ pub fn languages() {
 /// export target language version.
 pub fn selected_languages(target: &str) {
     let languages = lang_list();
+    let mut flag = false;
 
     for lang in languages.iter() {
         if lang.search(target) {
             export_version(&lang);
+            flag = true;
         }
+    }
+
+    if !flag {
+        println!("🔸 {} is not found", target)
     }
 }
 
@@ -31,5 +37,7 @@ fn export_version(lang: &Language) {
             println!("🔹 {}", lang.command);
             println!("\t{}", version.replace("\n", "\n\t"));
         }
+    } else {
+        println!("🔸 {} is not found\n", lang.command);
     }
 }
