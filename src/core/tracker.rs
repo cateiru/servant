@@ -20,6 +20,13 @@ struct CreateRes {
     redirect_url: String,
 }
 
+#[derive(Debug, Deserialize)]
+struct HistoryRes {
+    unique_id: String,
+    ip: String,
+    time: String,
+}
+
 pub struct Tracker<'a> {
     path: &'a Path,
     api: &'a str,
@@ -58,7 +65,7 @@ impl<'a> Tracker<'a> {
                     color::Fg(color::Reset),
                 );
                 println!(
-                    "\t🗓 Date: {}{}{}",
+                    "\t📆 Date: {}{}{}",
                     color::Fg(color::LightGreen),
                     record.date,
                     color::Fg(color::Reset)
@@ -144,7 +151,43 @@ impl<'a> Tracker<'a> {
                 )
             }
         } else {
-            println!("📦 List is Empty")
+            println!("id is not found.")
+        }
+
+        Ok(())
+    }
+
+    pub fn history(&self, id: &str) -> Result<(), Box<dyn Error>> {
+        let _secret = self.get_secret(id.to_string());
+        if let Ok(secret) = _secret {
+            let url = format!("{}/u?id={}&key={}", self.api, id, secret);
+
+            let res = reqwest::blocking::get(url)?;
+            let result = res.json::<Vec<HistoryRes>>()?;
+
+            for element in result {
+                println!(
+                    "💿 {}{}{}",
+                    color::Fg(color::Magenta),
+                    element.unique_id,
+                    color::Fg(color::Reset)
+                );
+                println!(
+                    "\t💡 IP address: {}{}{}",
+                    color::Fg(color::LightGreen),
+                    element.ip,
+                    color::Fg(color::Reset)
+                );
+                println!(
+                    "\t📆 Date: {}{}{}",
+                    color::Fg(color::LightGreen),
+                    element.time,
+                    color::Fg(color::Reset)
+                );
+                println!("");
+            }
+        } else {
+            println!("id is not found.");
         }
 
         Ok(())

@@ -56,7 +56,7 @@ pub enum Tracking {
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
     List,
 
-    #[structopt(name = "create", about = "Show access history")]
+    #[structopt(name = "history", about = "Show access history")]
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
     History {
         #[structopt(long)]

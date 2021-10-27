@@ -46,7 +46,9 @@ impl Parse {
                     Tracking::Delete { id } => {
                         tracker.delete(id).unwrap();
                     }
-                    Tracking::History { id } => {}
+                    Tracking::History { id } => {
+                        tracker.history(id).unwrap();
+                    }
                     Tracking::List => {
                         tracker.list().unwrap();
                     }
