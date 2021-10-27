@@ -7,8 +7,8 @@
 //! parse.call()
 //! ```
 
-use crate::cli::{Cli, Sub};
-use crate::core::{languages, nyancat, timer};
+use crate::cli::{Cli, Sub, Tracking};
+use crate::core::{languages, nyancat, timer, tracker};
 use structopt::StructOpt;
 
 pub struct Parse {
@@ -37,6 +37,21 @@ impl Parse {
                 }
             }
             Sub::Timer { time } => timer::timer(&time).unwrap(),
+            Sub::Tracking { sub } => {
+                let tracker = tracker::Tracker::default();
+                match sub {
+                    Tracking::Create { url } => {
+                        tracker.create(url).unwrap();
+                    }
+                    Tracking::Delete { id } => {
+                        tracker.delete(id).unwrap();
+                    }
+                    Tracking::History { id } => {}
+                    Tracking::List => {
+                        tracker.list().unwrap();
+                    }
+                }
+            }
         }
     }
 }

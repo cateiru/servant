@@ -27,4 +27,39 @@ pub enum Sub {
         #[structopt(long)]
         time: usize,
     },
+
+    #[structopt(name = "track", about = "tracking")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    Tracking {
+        #[structopt(subcommand)]
+        sub: Tracking,
+    },
+}
+
+#[derive(StructOpt)]
+pub enum Tracking {
+    #[structopt(name = "create", about = "Create tracking link")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    Create {
+        #[structopt(long)]
+        url: String,
+    },
+
+    #[structopt(name = "delete", about = "Delete tracking link and access history")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    Delete {
+        #[structopt(long)]
+        id: String,
+    },
+
+    #[structopt(name = "list", about = "List all tracking links")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    List,
+
+    #[structopt(name = "create", about = "Show access history")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    History {
+        #[structopt(long)]
+        id: String,
+    },
 }
