@@ -2,7 +2,7 @@ use chrono::Local;
 use csv::{Reader, Writer};
 use reqwest;
 use serde::{Deserialize, Serialize};
-use std::{error::Error, fs::File, path::Path};
+use std::{env, error::Error, fs::File, path::Path};
 use termion::color;
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -32,16 +32,14 @@ pub struct Tracker<'a> {
     api: &'a str,
 }
 
-impl<'a> Default for Tracker<'a> {
-    fn default() -> Self {
+impl<'a> Tracker<'a> {
+    pub fn new(path: &'a Path) -> Self {
         Self {
-            path: &Path::new(".servant_tracker"),
+            path: path,
             api: "https://a.cateiru.com",
         }
     }
-}
 
-impl<'a> Tracker<'a> {
     pub fn list(&self) -> Result<(), Box<dyn Error>> {
         if self.path.exists() {
             let mut rdr = self.read_csv()?;
@@ -163,28 +161,31 @@ impl<'a> Tracker<'a> {
             let url = format!("{}/u?id={}&key={}", self.api, id, secret);
 
             let res = reqwest::blocking::get(url)?;
-            let result = res.json::<Vec<HistoryRes>>()?;
-
-            for element in result {
-                println!(
-                    "💿 {}{}{}",
-                    color::Fg(color::Magenta),
-                    element.unique_id,
-                    color::Fg(color::Reset)
-                );
-                println!(
-                    "\t💡 IP address: {}{}{}",
-                    color::Fg(color::LightGreen),
-                    element.ip,
-                    color::Fg(color::Reset)
-                );
-                println!(
-                    "\t📆 Date: {}{}{}",
-                    color::Fg(color::LightGreen),
-                    element.time,
-                    color::Fg(color::Reset)
-                );
-                println!("");
+            let _result = res.json::<Vec<HistoryRes>>();
+            if let Ok(result) = _result {
+                for element in result {
+                    println!(
+                        "💿 {}{}{}",
+                        color::Fg(color::Magenta),
+                        element.unique_id,
+                        color::Fg(color::Reset)
+                    );
+                    println!(
+                        "\t💡 IP address: {}{}{}",
+                        color::Fg(color::LightGreen),
+                        element.ip,
+                        color::Fg(color::Reset)
+                    );
+                    println!(
+                        "\t📆 Date: {}{}{}",
+                        color::Fg(color::LightGreen),
+                        element.time,
+                        color::Fg(color::Reset)
+                    );
+                    println!("");
+                }
+            } else {
+                println!("empty history.")
             }
         } else {
             println!("id is not found.");

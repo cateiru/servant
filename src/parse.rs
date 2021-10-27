@@ -9,6 +9,7 @@
 
 use crate::cli::{Cli, Sub, Tracking};
 use crate::core::{languages, nyancat, timer, tracker};
+use std::{env, path::Path};
 use structopt::StructOpt;
 
 pub struct Parse {
@@ -38,7 +39,15 @@ impl Parse {
             }
             Sub::Timer { time } => timer::timer(&time).unwrap(),
             Sub::Tracking { sub } => {
-                let tracker = tracker::Tracker::default();
+                let _home = env::var("HOME");
+                let path: String;
+                if let Ok(home) = _home {
+                    path = format!("{}/.servant_tracker", home);
+                } else {
+                    path = ".servant_tracker".to_string();
+                }
+                let tracker = tracker::Tracker::new(&Path::new(&path));
+
                 match sub {
                     Tracking::Create { url } => {
                         tracker.create(url).unwrap();
