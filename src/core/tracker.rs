@@ -1,9 +1,11 @@
 use chrono::Local;
 use csv::{Reader, Writer};
 use reqwest;
+use rustc_serialize::json::Json;
 use serde::{Deserialize, Serialize};
 use std::{error::Error, fs::File, path::Path};
 use termion::color;
+use whois::WhoIs;
 
 #[derive(Debug, Deserialize, Serialize)]
 struct CSVElement {
@@ -182,6 +184,8 @@ impl<'a> Tracker<'a> {
                         element.time,
                         color::Fg(color::Reset)
                     );
+                    self.whois(element.ip)?;
+
                     println!("");
                 }
             } else {
@@ -253,6 +257,32 @@ impl<'a> Tracker<'a> {
             wtr.serialize(element)?;
         }
         wtr.flush()?;
+        Ok(())
+    }
+
+    fn whois(&self, ip: String) -> Result<(), Box<dyn Error>> {
+        println!("\t👤 Whois:");
+
+        let mut whois = WhoIs::new(ip);
+
+        let json = &Json::from_str(&whois.lookup()?)?;
+
+        if let Some(json_object) = json.as_object() {
+            for (key, value) in json_object {
+                println!(
+                    "\t\t▪ {}: {}{}{}",
+                    key,
+                    color::Fg(color::Red),
+                    match *value {
+                        Json::String(ref v) => format!("{}", v),
+
+                        _ => break,
+                    },
+                    color::Fg(color::Reset),
+                );
+            }
+        }
+
         Ok(())
     }
 }
