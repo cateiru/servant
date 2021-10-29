@@ -34,6 +34,10 @@ pub enum Sub {
         #[structopt(subcommand)]
         sub: Tracking,
     },
+
+    #[structopt(name = "bench", about = "bench mark")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    Bench,
 }
 
 #[derive(StructOpt)]

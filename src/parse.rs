@@ -8,7 +8,7 @@
 //! ```
 
 use crate::cli::{Cli, Sub, Tracking};
-use crate::core::{languages, nyancat, timer, tracker};
+use crate::core::{bench, languages, nyancat, timer, tracker};
 use std::{env, path::Path};
 use structopt::StructOpt;
 
@@ -62,6 +62,10 @@ impl Parse {
                         tracker.list().unwrap();
                     }
                 }
+            }
+
+            Sub::Bench => {
+                bench::bench();
             }
         }
     }
