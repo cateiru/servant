@@ -9,7 +9,7 @@
 
 use crate::cli::{Cli, Sub, Tracking};
 use crate::core::{bench, languages, nyancat, timer, tracker};
-use std::{env, path::Path};
+use std::{env, error::Error, path::Path};
 use structopt::StructOpt;
 
 pub struct Parse {
@@ -27,14 +27,14 @@ impl Default for Parse {
 
 impl Parse {
     /// Call functions.
-    pub fn call(&self) {
+    pub fn call(&self) -> Result<(), Box<dyn Error>> {
         match &self.cli.sub {
             Sub::NyanCat => nyancat::nyancat().unwrap(),
             Sub::Lang { language } => {
                 if let Some(lang) = language {
                     languages::selected_languages(&lang);
                 } else {
-                    languages::languages()
+                    languages::languages();
                 }
             }
             Sub::Timer { time } => timer::timer(&time).unwrap(),
@@ -50,16 +50,16 @@ impl Parse {
 
                 match sub {
                     Tracking::Create { url } => {
-                        tracker.create(url).unwrap();
+                        tracker.create(url)?;
                     }
                     Tracking::Delete { id } => {
-                        tracker.delete(id).unwrap();
+                        tracker.delete(id)?;
                     }
                     Tracking::History { id } => {
-                        tracker.history(id).unwrap();
+                        tracker.history(id)?;
                     }
                     Tracking::List => {
-                        tracker.list().unwrap();
+                        tracker.list()?;
                     }
                 }
             }
@@ -67,6 +67,8 @@ impl Parse {
             Sub::Bench => {
                 bench::bench();
             }
-        }
+        };
+
+        Ok(())
     }
 }

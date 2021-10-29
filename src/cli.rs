@@ -5,6 +5,8 @@ use structopt::{clap, StructOpt};
 #[structopt(setting(clap::AppSettings::ColoredHelp))]
 pub struct Cli {
     #[structopt(subcommand)]
+    /// servant is a (planned) cli that can do anything.
+    /// See https://github.com/yuto51942/servant#readme for usage or --help for help.
     pub sub: Sub,
 }
 
@@ -12,10 +14,16 @@ pub struct Cli {
 pub enum Sub {
     #[structopt(name = "nyancat", about = "nyanyanyanyanya")]
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    /// Show nyancat animation.
+    /// It ends with ^c.
+    ///
+    /// nyancat see more: https://www.nyan.cat/
     NyanCat,
 
     #[structopt(name = "lang", about = "check installed programming languages")]
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    /// Displays version information of the programming language installed on the device.
+    /// You can use the --language flag to display version information for the specified programming language.
     Lang {
         #[structopt(long)]
         language: Option<String>,
@@ -23,6 +31,7 @@ pub enum Sub {
 
     #[structopt(name = "timer", about = "countdown timer")]
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    /// It is a countdown timer.
     Timer {
         #[structopt(long)]
         time: usize,
@@ -30,6 +39,11 @@ pub enum Sub {
 
     #[structopt(name = "track", about = "tracking")]
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    /// Create and manage URLs that allow access tracking.
+    /// Inspired by https://gigazine.net/news/20140902-line-hijacker-track/
+    ///
+    /// When you access the generated URL, the IP address of the access source is saved.
+    /// server side source code: https://github.com/yuto51942/access-tracker
     Tracking {
         #[structopt(subcommand)]
         sub: Tracking,
@@ -37,6 +51,9 @@ pub enum Sub {
 
     #[structopt(name = "bench", about = "bench mark")]
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    /// Benchmark
+    ///
+    /// Calculate recursive Fibonacci.
     Bench,
 }
 
@@ -44,6 +61,10 @@ pub enum Sub {
 pub enum Tracking {
     #[structopt(name = "create", about = "Create tracking link")]
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    /// Create tracking link.
+    ///
+    /// You can check the created url in `list`.
+    /// and can show history in `history`.
     Create {
         #[structopt(long)]
         url: String,
@@ -51,6 +72,7 @@ pub enum Tracking {
 
     #[structopt(name = "delete", about = "Delete tracking link and access history")]
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    /// Delete the tracking URL you created.
     Delete {
         #[structopt(long)]
         id: String,
@@ -58,10 +80,12 @@ pub enum Tracking {
 
     #[structopt(name = "list", about = "List all tracking links")]
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    /// Display the list of created tracking URLs.
     List,
 
     #[structopt(name = "history", about = "Show access history")]
     #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    /// Check the access history of the tracking URL.
     History {
         #[structopt(long)]
         id: String,

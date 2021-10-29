@@ -8,5 +8,5 @@ use parse::Parse;
 fn main() {
     let parse = Parse::default();
 
-    parse.call();
+    parse.call().unwrap();
 }
