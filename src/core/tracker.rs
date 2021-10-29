@@ -2,7 +2,7 @@ use chrono::Local;
 use csv::{Reader, Writer};
 use reqwest;
 use serde::{Deserialize, Serialize};
-use std::{env, error::Error, fs::File, path::Path};
+use std::{error::Error, fs::File, path::Path};
 use termion::color;
 
 #[derive(Debug, Deserialize, Serialize)]
