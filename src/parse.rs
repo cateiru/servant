@@ -8,7 +8,7 @@
 //! ```
 
 use crate::cli::{Cli, Sub, Tracking};
-use crate::core::{bench, languages, nyancat, timer, tracker};
+use crate::core::{bench, emoji_search, languages, nyancat, timer, tracker};
 use std::{env, error::Error, path::Path};
 use structopt::StructOpt;
 
@@ -66,6 +66,10 @@ impl Parse {
 
             Sub::Bench => {
                 bench::bench();
+            }
+
+            Sub::Emoji { query } => {
+                emoji_search::emoji(query.to_string())?;
             }
         };
 

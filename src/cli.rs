@@ -55,6 +55,14 @@ pub enum Sub {
     ///
     /// Calculate recursive Fibonacci.
     Bench,
+
+    #[structopt(name = "emoji", about = "emoji search")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    /// Emoji searcher.
+    Emoji {
+        #[structopt(long)]
+        query: String,
+    },
 }
 
 #[derive(StructOpt)]
