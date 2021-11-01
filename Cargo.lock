@@ -2303,7 +2303,7 @@ dependencies = [
 
 [[package]]
 name = "yuto51942-servant"
-version = "1.0.2"
+version = "1.0.3"
 dependencies = [
  "chrono",
  "csv",

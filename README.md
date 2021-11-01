@@ -23,7 +23,7 @@ sv --help
 ```
 
 ```bash
-servant 1.0.0
+servant 1.0.3
 servant is utils cli.
 
 USAGE:
@@ -34,6 +34,8 @@ FLAGS:
     -V, --version    Prints version information
 
 SUBCOMMANDS:
+    bench      bench mark
+    emoji      emoji search
     help       Prints this message or the help of the given subcommand(s)
     lang       check installed programming languages
     nyancat    nyanyanyanyanya
@@ -41,11 +43,32 @@ SUBCOMMANDS:
     track      tracking
 ```
 
-#### lang
+#### bench
 
 ```bash
-sv lang --help
+sv-bench 1.0.2
+Benchmark
+
+Calculate recursive Fibonacci.
+
+USAGE:
+    sv bench
 ```
+
+#### emoji
+
+```bash
+sv-emoji 1.0.3
+emoji search
+
+USAGE:
+    sv emoji --query <query>
+
+OPTIONS:
+        --query <query>
+```
+
+#### lang
 
 ```bash
 sv-lang 1.0.0
@@ -54,10 +77,6 @@ check installed programming languages
 USAGE:
     sv lang [OPTIONS]
 
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
-
 OPTIONS:
         --language <language>
 ```
@@ -65,26 +84,14 @@ OPTIONS:
 #### nyancat
 
 ```bash
-sv nyancat --help
-```
-
-```bash
 sv-nyancat 1.0.0
 nyanyanyanyanya
 
 USAGE:
     sv nyancat
-
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
 ```
 
 #### timer
-
-```bash
-sv timer --help
-```
 
 ```bash
 sv-timer 0.1.4
@@ -92,10 +99,6 @@ countdown timer
 
 USAGE:
     sv timer --time <time>
-
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
 
 OPTIONS:
         --time <time>
@@ -113,10 +116,6 @@ tracking
 
 USAGE:
     sv track <SUBCOMMAND>
-
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
 
 SUBCOMMANDS:
     create     Create tracking link
