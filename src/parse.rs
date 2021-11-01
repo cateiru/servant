@@ -9,7 +9,7 @@
 
 use crate::cli::{Cli, Sub, Tracking};
 use crate::core::{bench, emoji_search, languages, nyancat, timer, tracker};
-use std::{env, error::Error, path::Path};
+use std::{env, error::Error, fs::create_dir_all, path::Path};
 use structopt::StructOpt;
 
 pub struct Parse {
@@ -28,6 +28,8 @@ impl Default for Parse {
 impl Parse {
     /// Call functions.
     pub fn call(&self) -> Result<(), Box<dyn Error>> {
+        self.dir()?;
+
         match &self.cli.sub {
             Sub::NyanCat => nyancat::nyancat().unwrap(),
             Sub::Lang { language } => {
@@ -40,13 +42,16 @@ impl Parse {
             Sub::Timer { time } => timer::timer(&time).unwrap(),
             Sub::Tracking { sub } => {
                 let _home = env::var("HOME");
-                let path: String;
+                let path_str: String;
                 if let Ok(home) = _home {
-                    path = format!("{}/.servant_tracker", home);
+                    path_str = format!("{}/.servant/tracker", home);
                 } else {
-                    path = ".servant_tracker".to_string();
+                    path_str = ".servant/tracker".to_string();
                 }
-                let tracker = tracker::Tracker::new(&Path::new(&path));
+
+                let path = &Path::new(&path_str);
+
+                let tracker = tracker::Tracker::new(path);
 
                 match sub {
                     Tracking::Create { url } => {
@@ -73,6 +78,27 @@ impl Parse {
             }
         };
 
+        Ok(())
+    }
+
+    /// Create cache dir
+    /// dir name of `.servant`
+    ///
+    /// If the `HOME` environment variable is set, create it on that path.
+    fn dir(&self) -> Result<(), Box<dyn Error>> {
+        let _home = env::var("HOME");
+        let path_str: String;
+        if let Ok(home) = _home {
+            path_str = format!("{}/.servant", home);
+        } else {
+            path_str = ".servant".to_string();
+        }
+
+        let path = &Path::new(&path_str);
+
+        if !path.is_dir() {
+            create_dir_all(path)?;
+        }
         Ok(())
     }
 }

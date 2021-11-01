@@ -351,8 +351,7 @@ checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 [[package]]
 name = "emoji_searcher"
 version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a2e244f6d9faa7e133b81a734a361fe3f5083bd3aeda40de029d28ef56585401"
+source = "git+https://github.com/sphaerophoria/emoji_searcher?branch=master#036ab54c300163cfd3ce4a7244fa4d3af1f1602c"
 dependencies = [
  "app_dirs",
  "log",
