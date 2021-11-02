@@ -1,6 +1,6 @@
 [package]
 name = "yuto51942-servant"
-version = "1.0.4"
+version = "1.0.5"
 edition = "2021"
 authors = ["Yuto Watanabe <yuto.w51942@gmail.com>"]
 license = "MIT"
@@ -28,6 +28,6 @@ rustc-serialize = "0.3.24"
 # TODO: If emoji_seacher is updated, please change the import source from github to crate.io.
 # current repository: https://github.com/sphaerophoria/emoji_searcher.
 # and crates.io: https://crates.io/crates/emoji_searcher
-emoji_searcher = {git = "https://github.com/cateiru/emoji_searcher", branch = "master", version="0.1.0"}
+emoji_searcher = {git = "https://github.com/cateiru/emoji_searcher", branch = "master", version="0.1.1"}
 reqwest = { version = "0.11.6", features = ["blocking", "json"] }
 serde = { version = "1.0.130", features = ["derive"] }
