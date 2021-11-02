@@ -350,8 +350,8 @@ checksum = "e78d4f1cc4ae33bbfc157ed5d5a5ef3bc29227303d595861deb238fcec4e9457"
 
 [[package]]
 name = "emoji_searcher"
-version = "0.1.0"
-source = "git+https://github.com/sphaerophoria/emoji_searcher?branch=master#036ab54c300163cfd3ce4a7244fa4d3af1f1602c"
+version = "0.1.1"
+source = "git+https://github.com/cateiru/emoji_searcher?branch=master#251b9fdd8600a32d251f32fd5891c979f5a788e4"
 dependencies = [
  "app_dirs",
  "log",
@@ -2303,7 +2303,7 @@ dependencies = [
 
 [[package]]
 name = "yuto51942-servant"
-version = "1.0.3"
+version = "1.0.4"
 dependencies = [
  "chrono",
  "csv",
