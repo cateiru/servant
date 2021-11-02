@@ -1,5 +1,5 @@
 use crate::utils::print;
-use emoji_searcher::{EmojiDb, EmojiSearcher};
+use emoji_searcher_temp::{EmojiDb, EmojiSearcher};
 use std::{env, error::Error, fs::File, path::Path, rc::Rc};
 use termion::color;
 
