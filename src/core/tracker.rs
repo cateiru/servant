@@ -38,7 +38,7 @@ impl<'a> Tracker<'a> {
     pub fn new(path: &'a Path) -> Self {
         Self {
             path: path,
-            api: "https://a.cateiru.com",
+            api: "https://uie.jp",
         }
     }
 
