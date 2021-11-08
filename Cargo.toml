@@ -1,6 +1,6 @@
 [package]
 name = "yuto51942-servant"
-version = "1.0.7"
+version = "1.0.8"
 edition = "2021"
 authors = ["Yuto Watanabe <yuto.w51942@gmail.com>"]
 license = "MIT"
