@@ -97,5 +97,13 @@ pub enum Tracking {
     History {
         #[structopt(long)]
         id: String,
+
+        /// Export oneline
+        #[structopt(long)]
+        oneline: bool,
+
+        /// Show all ip
+        #[structopt(long)]
+        all: bool,
     },
 }

@@ -1,9 +1,10 @@
+use crate::utils::ip_blacklist;
 use chrono::Local;
 use csv::{Reader, Writer};
 use reqwest;
 use rustc_serialize::json::Json;
 use serde::{Deserialize, Serialize};
-use std::{error::Error, fs::File, path::Path};
+use std::{collections::HashMap, error::Error, fs::File, path::Path};
 use termion::color;
 use whois::WhoIs;
 
@@ -157,7 +158,8 @@ impl<'a> Tracker<'a> {
         Ok(())
     }
 
-    pub fn history(&self, id: &str) -> Result<(), Box<dyn Error>> {
+    pub fn history(&mut self, id: &str, oneline: bool, all: bool) -> Result<(), Box<dyn Error>> {
+        let mut show_his = History::new(oneline, all);
         let _secret = self.get_secret(id.to_string());
         if let Ok(secret) = _secret {
             let url = format!("{}/u?id={}&key={}", self.api, id, secret);
@@ -165,29 +167,7 @@ impl<'a> Tracker<'a> {
             let res = reqwest::blocking::get(url)?;
             let _result = res.json::<Vec<HistoryRes>>();
             if let Ok(result) = _result {
-                for element in result {
-                    println!(
-                        "💿 {}{}{}",
-                        color::Fg(color::Magenta),
-                        element.unique_id,
-                        color::Fg(color::Reset)
-                    );
-                    println!(
-                        "\t💡 IP address: {}{}{}",
-                        color::Fg(color::LightGreen),
-                        element.ip,
-                        color::Fg(color::Reset)
-                    );
-                    println!(
-                        "\t📆 Date: {}{}{}",
-                        color::Fg(color::LightGreen),
-                        element.time,
-                        color::Fg(color::Reset)
-                    );
-                    self.whois(element.ip)?;
-
-                    println!("");
-                }
+                show_his.print(result)?;
             } else {
                 println!("empty history.")
             }
@@ -259,13 +239,51 @@ impl<'a> Tracker<'a> {
         wtr.flush()?;
         Ok(())
     }
+}
 
-    fn whois(&self, ip: String) -> Result<(), Box<dyn Error>> {
+struct History {
+    cache: HashMap<String, String>,
+    oneline: bool,
+    all: bool,
+}
+
+impl History {
+    pub fn new(oneline: bool, all: bool) -> Self {
+        Self {
+            cache: HashMap::new(),
+            oneline: oneline,
+            all: all,
+        }
+    }
+
+    pub fn print(&mut self, result: Vec<HistoryRes>) -> Result<(), Box<dyn Error>> {
+        for element in result {
+            if self.all || self.select_ip(element.ip.clone()) {
+                match self.oneline {
+                    true => self.history_oneline(&element),
+                    false => self.history_multiline(&element)?,
+                }
+            }
+        }
+        Ok(())
+    }
+
+    fn whois(&mut self, ip: String) -> Result<(), Box<dyn Error>> {
         println!("\t👤 Whois:");
 
-        let mut whois = WhoIs::new(ip);
+        let lookup: String = match self.cache.get(&ip) {
+            Some(value) => value.clone(),
+            None => {
+                let mut whois = WhoIs::new(ip.clone());
+                let lookup = whois.lookup()?;
 
-        let json = &Json::from_str(&whois.lookup()?)?;
+                self.cache.insert(ip.clone(), lookup.clone());
+
+                lookup
+            }
+        };
+
+        let json = &Json::from_str(&lookup)?;
 
         if let Some(json_object) = json.as_object() {
             for (key, value) in json_object {
@@ -284,5 +302,49 @@ impl<'a> Tracker<'a> {
         }
 
         Ok(())
+    }
+
+    fn select_ip(&self, ip: String) -> bool {
+        let result = ip_blacklist::IP_BLACKLIST.iter().position(|&r| r == ip);
+
+        result.is_none()
+    }
+
+    fn history_multiline(&mut self, history: &HistoryRes) -> Result<(), Box<dyn Error>> {
+        println!(
+            "💿 {}{}{}",
+            color::Fg(color::Magenta),
+            history.unique_id,
+            color::Fg(color::Reset)
+        );
+        println!(
+            "\t💡 IP address: {}{}{}",
+            color::Fg(color::LightGreen),
+            history.ip,
+            color::Fg(color::Reset)
+        );
+        println!(
+            "\t📆 Date: {}{}{}",
+            color::Fg(color::LightGreen),
+            history.time,
+            color::Fg(color::Reset)
+        );
+        self.whois(history.ip.clone())?;
+
+        println!("");
+
+        Ok(())
+    }
+
+    fn history_oneline(&self, history: &HistoryRes) {
+        println!(
+            "💿 {}{}{} - {}{}{}",
+            color::Fg(color::Magenta),
+            history.ip,
+            color::Fg(color::Reset),
+            color::Fg(color::LightGreen),
+            history.time,
+            color::Fg(color::Reset)
+        );
     }
 }

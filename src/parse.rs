@@ -51,7 +51,7 @@ impl Parse {
 
                 let path = &Path::new(&path_str);
 
-                let tracker = tracker::Tracker::new(path);
+                let mut tracker = tracker::Tracker::new(path);
 
                 match sub {
                     Tracking::Create { url } => {
@@ -60,8 +60,8 @@ impl Parse {
                     Tracking::Delete { id } => {
                         tracker.delete(id)?;
                     }
-                    Tracking::History { id } => {
-                        tracker.history(id)?;
+                    Tracking::History { id, oneline, all } => {
+                        tracker.history(id, *oneline, *all)?;
                     }
                     Tracking::List => {
                         tracker.list()?;
