@@ -31,6 +31,12 @@ struct HistoryRes {
     time: String,
 }
 
+struct PrintHistory {
+    unique_id: String,
+    ip: String,
+    time: DateTime<FixedOffset>,
+}
+
 pub struct Tracker<'a> {
     path: &'a Path,
     api: &'a str,
@@ -177,7 +183,7 @@ impl<'a> Tracker<'a> {
                 if graph {
                     show_his.print_graph(result)?;
                 } else {
-                    show_his.print(result)?;
+                    show_his.print(&result)?;
                 }
             } else {
                 println!("empty history.")
@@ -267,11 +273,23 @@ impl History {
         }
     }
 
-    pub fn print(&mut self, result: Vec<HistoryRes>) -> Result<(), Box<dyn Error>> {
+    pub fn print(&mut self, result: &Vec<HistoryRes>) -> Result<(), Box<dyn Error>> {
+        let mut his: Vec<PrintHistory> = vec![];
+
         for element in result {
+            his.push(PrintHistory {
+                unique_id: element.unique_id.clone(),
+                ip: element.ip.clone(),
+                time: DateTime::parse_from_rfc3339(&element.time)?,
+            })
+        }
+
+        his.sort_by(|x, y| y.time.cmp(&x.time));
+
+        for element in his {
             if self.all || self.select_ip(&element.ip) {
                 match self.oneline {
-                    true => self.history_oneline(&element),
+                    true => self.history_oneline(&element)?,
                     false => self.history_multiline(&element)?,
                 }
             }
@@ -346,7 +364,7 @@ impl History {
         result.is_none()
     }
 
-    fn history_multiline(&mut self, history: &HistoryRes) -> Result<(), Box<dyn Error>> {
+    fn history_multiline(&mut self, history: &PrintHistory) -> Result<(), Box<dyn Error>> {
         println!(
             "💿 {}{}{}",
             color::Fg(color::Magenta),
@@ -362,7 +380,7 @@ impl History {
         println!(
             "\t📆 Date: {}{}{}",
             color::Fg(color::LightGreen),
-            history.time,
+            history.time.format("%F (%a) %T"),
             color::Fg(color::Reset)
         );
         self.whois(history.ip.clone())?;
@@ -372,15 +390,17 @@ impl History {
         Ok(())
     }
 
-    fn history_oneline(&self, history: &HistoryRes) {
+    fn history_oneline(&self, history: &PrintHistory) -> Result<(), Box<dyn Error>> {
         println!(
             "💿 {}{}{} - {}{}{}",
             color::Fg(color::Magenta),
             history.ip,
             color::Fg(color::Reset),
             color::Fg(color::LightGreen),
-            history.time,
+            history.time.format("%F (%a) %T"),
             color::Fg(color::Reset)
         );
+
+        Ok(())
     }
 }
