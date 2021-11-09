@@ -105,5 +105,9 @@ pub enum Tracking {
         /// Show all ip
         #[structopt(long)]
         all: bool,
+
+        /// Print graph
+        #[structopt(long)]
+        graph: bool,
     },
 }

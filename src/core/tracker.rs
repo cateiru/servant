@@ -1,5 +1,6 @@
-use crate::utils::ip_blacklist;
+use crate::utils::{graph as util_graph, ip_blacklist};
 use chrono::Local;
+use chrono::{DateTime, Datelike, FixedOffset};
 use csv::{Reader, Writer};
 use reqwest;
 use rustc_serialize::json::Json;
@@ -158,7 +159,13 @@ impl<'a> Tracker<'a> {
         Ok(())
     }
 
-    pub fn history(&mut self, id: &str, oneline: bool, all: bool) -> Result<(), Box<dyn Error>> {
+    pub fn history(
+        &self,
+        id: &str,
+        oneline: bool,
+        all: bool,
+        graph: bool,
+    ) -> Result<(), Box<dyn Error>> {
         let mut show_his = History::new(oneline, all);
         let _secret = self.get_secret(id.to_string());
         if let Ok(secret) = _secret {
@@ -167,7 +174,11 @@ impl<'a> Tracker<'a> {
             let res = reqwest::blocking::get(url)?;
             let _result = res.json::<Vec<HistoryRes>>();
             if let Ok(result) = _result {
-                show_his.print(result)?;
+                if graph {
+                    show_his.print_graph(result)?;
+                } else {
+                    show_his.print(result)?;
+                }
             } else {
                 println!("empty history.")
             }
@@ -258,13 +269,38 @@ impl History {
 
     pub fn print(&mut self, result: Vec<HistoryRes>) -> Result<(), Box<dyn Error>> {
         for element in result {
-            if self.all || self.select_ip(element.ip.clone()) {
+            if self.all || self.select_ip(&element.ip) {
                 match self.oneline {
                     true => self.history_oneline(&element),
                     false => self.history_multiline(&element)?,
                 }
             }
         }
+        Ok(())
+    }
+
+    pub fn print_graph(&mut self, result: Vec<HistoryRes>) -> Result<(), Box<dyn Error>> {
+        let mut plot_data: Vec<(DateTime<FixedOffset>, usize)> = vec![];
+
+        for element in result {
+            if self.all || self.select_ip(&element.ip) {
+                let date = DateTime::parse_from_rfc3339(&element.time)?;
+                let index = plot_data
+                    .iter()
+                    .position(|x| x.0.month() == date.month() && x.0.day() == date.day());
+
+                if let Some(index) = index {
+                    plot_data[index] = (plot_data[index].0, plot_data[index].1 + 1);
+                } else {
+                    plot_data.push((date, 1));
+                }
+            }
+        }
+
+        plot_data.sort_by(|x, y| y.0.cmp(&x.0));
+
+        util_graph::plot_barchart(plot_data)?;
+
         Ok(())
     }
 
@@ -304,7 +340,7 @@ impl History {
         Ok(())
     }
 
-    fn select_ip(&self, ip: String) -> bool {
+    fn select_ip(&self, ip: &str) -> bool {
         let result = ip_blacklist::IP_BLACKLIST.iter().position(|&r| r == ip);
 
         result.is_none()
