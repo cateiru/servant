@@ -1,6 +1,6 @@
 use crate::utils::{graph as util_graph, ip_blacklist};
-use chrono::Local;
-use chrono::{DateTime, Datelike, FixedOffset};
+use chrono::{DateTime, Datelike, FixedOffset, Local};
+use chrono_tz::{Asia::Tokyo, Tz};
 use csv::{Reader, Writer};
 use reqwest;
 use rustc_serialize::json::Json;
@@ -298,11 +298,12 @@ impl History {
     }
 
     pub fn print_graph(&mut self, result: Vec<HistoryRes>) -> Result<(), Box<dyn Error>> {
-        let mut plot_data: Vec<(DateTime<FixedOffset>, usize)> = vec![];
+        let mut plot_data: Vec<(DateTime<Tz>, usize)> =
+            vec![(Local::now().with_timezone(&Tokyo), 0)];
 
         for element in result {
             if self.all || self.select_ip(&element.ip) {
-                let date = DateTime::parse_from_rfc3339(&element.time)?;
+                let date = DateTime::parse_from_rfc3339(&element.time)?.with_timezone(&Tokyo);
                 let index = plot_data
                     .iter()
                     .position(|x| x.0.month() == date.month() && x.0.day() == date.day());
