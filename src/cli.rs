@@ -98,16 +98,23 @@ pub enum Tracking {
         #[structopt(long)]
         id: String,
 
+        #[structopt(long)]
+        ip: Option<String>,
+
         /// Export oneline
         #[structopt(long)]
         oneline: bool,
 
-        /// Show all ip
-        #[structopt(long)]
-        all: bool,
-
         /// Print graph
         #[structopt(long)]
         graph: bool,
+
+        // Print details
+        #[structopt(long)]
+        details: bool,
+
+        // Print whois
+        #[structopt(long)]
+        whois: bool,
     },
 }
