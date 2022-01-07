@@ -8,7 +8,7 @@
 //! ```
 
 use crate::cli::{Cli, Sub, Tracking};
-use crate::core::{bench, emoji_search, languages, nyancat, timer, tracker};
+use crate::core::{access_tracker, bench, emoji_search, languages, nyancat, save, timer};
 use std::{env, error::Error, fs::create_dir_all, path::Path};
 use structopt::StructOpt;
 
@@ -31,7 +31,7 @@ impl Parse {
         self.dir()?;
 
         match &self.cli.sub {
-            Sub::NyanCat => nyancat::nyancat().unwrap(),
+            Sub::NyanCat => nyancat::nyancat()?,
             Sub::Lang { language } => {
                 if let Some(lang) = language {
                     languages::selected_languages(&lang);
@@ -39,19 +39,12 @@ impl Parse {
                     languages::languages();
                 }
             }
-            Sub::Timer { time } => timer::timer(&time).unwrap(),
+            Sub::Timer { time } => timer::timer(&time)?,
             Sub::Tracking { sub } => {
-                let _home = env::var("HOME");
-                let path_str: String;
-                if let Ok(home) = _home {
-                    path_str = format!("{}/.servant/tracker", home);
-                } else {
-                    path_str = ".servant/tracker".to_string();
-                }
+                let path = save::SaveCache::current_path("tracker".to_string())?;
+                let save = save::SaveCache::new(&path);
 
-                let path = &Path::new(&path_str);
-
-                let tracker = tracker::Tracker::new(path);
+                let tracker = access_tracker::track::Tracker::new(&save);
 
                 match sub {
                     Tracking::Create { url } => {
@@ -62,11 +55,25 @@ impl Parse {
                     }
                     Tracking::History {
                         id,
+                        ip,
                         oneline,
-                        all,
                         graph,
+                        details,
+                        whois,
                     } => {
-                        tracker.history(id, *oneline, *all, *graph)?;
+                        let history = tracker.history(id)?;
+
+                        if let Some(ip) = ip {
+                            history.print_by_ip(ip.to_string(), *whois, *details)?;
+                        } else {
+                            if *oneline {
+                                history.print_all_oneline()?;
+                            } else if *graph {
+                                history.print_graph()?;
+                            } else {
+                                history.print_all(*whois, *details)?;
+                            }
+                        }
                     }
                     Tracking::List => {
                         tracker.list()?;
