@@ -165,6 +165,12 @@ impl HistoryElement {
             self.ip,
             color::Fg(color::Reset)
         );
+        println!(
+            "\t\t📛 Name: {}{}{}",
+            color::Fg(color::LightGreen),
+            self.user_agent.name,
+            color::Fg(color::Reset),
+        );
         if is_user_agent {
             HistoryElement::print_user_agent(&self.user_agent);
         }
@@ -193,12 +199,6 @@ impl HistoryElement {
     }
 
     fn print_user_agent(user_agent: &UserAgent) {
-        println!(
-            "\t\t📛 Name: {}{}{}",
-            color::Fg(color::LightGreen),
-            user_agent.name,
-            color::Fg(color::Reset),
-        );
         println!(
             "\t\t🖥 OS: {}{}{} - {}{}{}",
             color::Fg(color::LightGreen),
