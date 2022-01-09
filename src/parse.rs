@@ -7,8 +7,8 @@
 //! parse.call()
 //! ```
 
-use crate::cli::{Cli, Sub, Tracking};
-use crate::core::{access_tracker, bench, emoji_search, languages, nyancat, save, timer};
+use crate::cli::{Cli, Package, Sub, Tracking};
+use crate::core::{access_tracker, bench, emoji_search, languages, nyancat, packages, save, timer};
 use std::{env, error::Error, fs::create_dir_all, path::Path};
 use structopt::StructOpt;
 
@@ -88,6 +88,12 @@ impl Parse {
             Sub::Emoji { query } => {
                 emoji_search::emoji(query.to_string())?;
             }
+
+            Sub::Package { sub } => match sub {
+                Package::Update => {
+                    packages::update::update_packages()?;
+                }
+            },
         };
 
         Ok(())

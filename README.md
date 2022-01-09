@@ -125,6 +125,24 @@ SUBCOMMANDS:
     list       List all tracking links
 ```
 
+#### package
+
+```bash
+sv-package 1.1.0
+packages util
+
+USAGE:
+    sv package <SUBCOMMAND>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+SUBCOMMANDS:
+    help      Prints this message or the help of the given subcommand(s)
+    update    Update packages
+```
+
 ## LICENSE
 
 [MIT](LICENSE)
