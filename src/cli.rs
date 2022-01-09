@@ -63,6 +63,14 @@ pub enum Sub {
         #[structopt(long)]
         query: String,
     },
+
+    #[structopt(name = "package", about = "packages util")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    /// Packages utils.
+    Package {
+        #[structopt(subcommand)]
+        sub: Package,
+    },
 }
 
 #[derive(StructOpt)]
@@ -117,4 +125,12 @@ pub enum Tracking {
         #[structopt(long)]
         whois: bool,
     },
+}
+
+#[derive(StructOpt)]
+pub enum Package {
+    #[structopt(name = "update", about = "Update packages")]
+    #[structopt(setting(clap::AppSettings::ColoredHelp))]
+    /// Update packages.
+    Update,
 }
