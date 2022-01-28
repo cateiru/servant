@@ -66,7 +66,7 @@ impl<'a> SaveCache<'a> {
         let mut rdr = self.read_csv()?;
         for result in rdr.deserialize() {
             let record: T = result?;
-            if f(&record) {
+            if !f(&record) {
                 element.push(record);
             }
         }
