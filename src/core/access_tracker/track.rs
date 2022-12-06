@@ -37,7 +37,7 @@ impl<'a> Tracker<'a> {
     pub fn new(save: &'a SaveCache) -> Self {
         Self {
             save: save,
-            api: "https://uie.jp",
+            api: "https://s.cateiru.com",
         }
     }
 
